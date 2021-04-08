@@ -76,3 +76,71 @@ division_1(int arg1, int arg2,  CLIENT *clnt)
 	}
 	return (&clnt_res);
 }
+
+mivector *
+sumavectores_1(mivector arg1, mivector arg2,  CLIENT *clnt)
+{
+	sumavectores_1_argument arg;
+	static mivector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.arg1 = arg1;
+	arg.arg2 = arg2;
+	if (clnt_call (clnt, sumavectores, (xdrproc_t) xdr_sumavectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_mivector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+mivector *
+restavectores_1(mivector arg1, mivector arg2,  CLIENT *clnt)
+{
+	restavectores_1_argument arg;
+	static mivector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.arg1 = arg1;
+	arg.arg2 = arg2;
+	if (clnt_call (clnt, restavectores, (xdrproc_t) xdr_restavectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_mivector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+mivector *
+multiplicacionvectores_1(mivector arg1, mivector arg2,  CLIENT *clnt)
+{
+	multiplicacionvectores_1_argument arg;
+	static mivector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.arg1 = arg1;
+	arg.arg2 = arg2;
+	if (clnt_call (clnt, multiplicacionvectores, (xdrproc_t) xdr_multiplicacionvectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_mivector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+mivector *
+divisionvectore_1(mivector arg1, mivector arg2,  CLIENT *clnt)
+{
+	divisionvectore_1_argument arg;
+	static mivector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.arg1 = arg1;
+	arg.arg2 = arg2;
+	if (clnt_call (clnt, divisionvectore, (xdrproc_t) xdr_divisionvectore_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_mivector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}

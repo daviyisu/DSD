@@ -47,3 +47,54 @@ division_1_svc(int arg1, int arg2,  struct svc_req *rqstp)
 
 	return &result;
 }
+
+mivector *
+sumavectores_1_svc(mivector arg1, mivector arg2,  struct svc_req *rqstp)
+{
+	static mivector  result;
+
+	result.a = arg1.a + arg2.a;
+	result.b = arg1.b + arg2.b;
+
+	return &result;
+}
+
+mivector *
+restavectores_1_svc(mivector arg1, mivector arg2,  struct svc_req *rqstp)
+{
+	static mivector  result;
+
+	result.a = arg1.a - arg2.a;
+	result.b = arg1.b - arg2.b;
+
+	return &result;
+}
+
+mivector *
+multiplicacionvectores_1_svc(mivector arg1, mivector arg2,  struct svc_req *rqstp)
+{
+	static mivector  result;
+
+	result.a = arg1.a * arg2.a;
+	result.b = arg1.b * arg2.b;
+
+	return &result;
+}
+
+mivector *
+divisionvectore_1_svc(mivector arg1, mivector arg2,  struct svc_req *rqstp)
+{
+	static mivector  result;
+	if (arg2.a != 0 && arg2.b != 0)
+	{
+		result.a = arg1.a / arg2.a;
+		result.b = arg1.b / arg2.b;
+	}else{
+		result.a = 0;
+		result.b = 0;
+	}
+		
+	
+	
+	return &result;
+}
