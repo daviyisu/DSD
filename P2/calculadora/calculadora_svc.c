@@ -52,16 +52,16 @@ _restavectores_1 (restavectores_1_argument *argp, struct svc_req *rqstp)
 	return (restavectores_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
-static mivector *
-_multiplicacionvectores_1 (multiplicacionvectores_1_argument *argp, struct svc_req *rqstp)
+static int *
+_multiplicacionescalar_1 (multiplicacionescalar_1_argument *argp, struct svc_req *rqstp)
 {
-	return (multiplicacionvectores_1_svc(argp->arg1, argp->arg2, rqstp));
+	return (multiplicacionescalar_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
 static mivector *
-_divisionvectore_1 (divisionvectore_1_argument *argp, struct svc_req *rqstp)
+_multiplicacionvectorial_1 (multiplicacionvectorial_1_argument *argp, struct svc_req *rqstp)
 {
-	return (divisionvectore_1_svc(argp->arg1, argp->arg2, rqstp));
+	return (multiplicacionvectorial_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
 static void
@@ -74,8 +74,8 @@ calcprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		division_1_argument division_1_arg;
 		sumavectores_1_argument sumavectores_1_arg;
 		restavectores_1_argument restavectores_1_arg;
-		multiplicacionvectores_1_argument multiplicacionvectores_1_arg;
-		divisionvectore_1_argument divisionvectore_1_arg;
+		multiplicacionescalar_1_argument multiplicacionescalar_1_arg;
+		multiplicacionvectorial_1_argument multiplicacionvectorial_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -122,16 +122,16 @@ calcprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		local = (char *(*)(char *, struct svc_req *)) _restavectores_1;
 		break;
 
-	case multiplicacionvectores:
-		_xdr_argument = (xdrproc_t) xdr_multiplicacionvectores_1_argument;
-		_xdr_result = (xdrproc_t) xdr_mivector;
-		local = (char *(*)(char *, struct svc_req *)) _multiplicacionvectores_1;
+	case multiplicacionescalar:
+		_xdr_argument = (xdrproc_t) xdr_multiplicacionescalar_1_argument;
+		_xdr_result = (xdrproc_t) xdr_int;
+		local = (char *(*)(char *, struct svc_req *)) _multiplicacionescalar_1;
 		break;
 
-	case divisionvectore:
-		_xdr_argument = (xdrproc_t) xdr_divisionvectore_1_argument;
+	case multiplicacionvectorial:
+		_xdr_argument = (xdrproc_t) xdr_multiplicacionvectorial_1_argument;
 		_xdr_result = (xdrproc_t) xdr_mivector;
-		local = (char *(*)(char *, struct svc_req *)) _divisionvectore_1;
+		local = (char *(*)(char *, struct svc_req *)) _multiplicacionvectorial_1;
 		break;
 
 	default:

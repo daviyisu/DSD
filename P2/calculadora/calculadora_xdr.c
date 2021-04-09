@@ -24,6 +24,8 @@ xdr_mivector (XDR *xdrs, mivector *objp)
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->b))
 		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->c))
+		 return FALSE;
 	return TRUE;
 }
 
@@ -88,7 +90,7 @@ xdr_restavectores_1_argument (XDR *xdrs, restavectores_1_argument *objp)
 }
 
 bool_t
-xdr_multiplicacionvectores_1_argument (XDR *xdrs, multiplicacionvectores_1_argument *objp)
+xdr_multiplicacionescalar_1_argument (XDR *xdrs, multiplicacionescalar_1_argument *objp)
 {
 	 if (!xdr_mivector (xdrs, &objp->arg1))
 		 return FALSE;
@@ -98,7 +100,7 @@ xdr_multiplicacionvectores_1_argument (XDR *xdrs, multiplicacionvectores_1_argum
 }
 
 bool_t
-xdr_divisionvectore_1_argument (XDR *xdrs, divisionvectore_1_argument *objp)
+xdr_multiplicacionvectorial_1_argument (XDR *xdrs, multiplicacionvectorial_1_argument *objp)
 {
 	 if (!xdr_mivector (xdrs, &objp->arg1))
 		 return FALSE;

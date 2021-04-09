@@ -3,6 +3,7 @@ typedef struct mivector *v;
 struct mivector{  
 	int a;
 	int b;
+	int c;
 };
 
 
@@ -14,7 +15,7 @@ program CALCPROG {
 		int division(int, int) = 4;
 		mivector sumavectores(mivector, mivector) = 5;
 		mivector restavectores(mivector, mivector) = 6;
-		mivector multiplicacionvectores(mivector, mivector) = 7;
-		mivector divisionvectore(mivector, mivector) = 8;
+		int multiplicacionescalar(mivector, mivector) = 7;
+		mivector multiplicacionvectorial(mivector, mivector) = 8;
 	} =1;
 } = 0x20000001;
