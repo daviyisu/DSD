@@ -1,0 +1,194 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Domótica</title>
+	</head>
+	<body>
+
+		<h1>Domótica</h1>
+		
+        <form  id="formulario">
+            <h2> Sensor aire acondicionado </h2>
+
+
+			<p>Máximo: 40</p>
+			<p>Mínimo: 5</p>
+            
+            <label for="valor_temp">Temperatura: </label>
+            <input name="valor_temp" id="valor_temp" type="number" value="20"/>
+            
+
+		  <button type="button" onclick="encenderAire()">Encender aire acondicionado</button>
+		  <button type="button" onclick="apagarAire()">Apagar aire acondicionado</button>
+          
+            <h2> Sensor luminosidad </h2>
+
+			<p>Máximo: 40</p>
+			<p>Mínimo: 5</p>
+            
+              <label for="valor_lumi">Luminosidad: </label>
+              <input name="valor_lumi" id="valor_lumi" type="number" value="20"/>
+            
+            
+		  <button type="button" onclick="abrirPersianas()">Abrir persianas</button>
+		  <button type="button" onclick="cerrarPersianas()">Cerrar persianas</button> <br> <br>
+		  <button type="button" onclick="enviar_medidas()">Enviar datos</button>
+		</form>
+
+		  <div id="historial"></div>
+
+
+
+
+	</body>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		function actualizarHistorial(msg){
+			var historial = document.getElementById('historial');
+			historial.innerHTML += msg;
+		}
+
+		var persianaCerrada = false;
+		var aireEncendido = false;
+		
+
+		function comprobacionAgente(){
+			var msg = "";
+			var aire = false;
+			var lumi = false;
+			
+
+			var valor_temp = document.getElementById('valor_temp').value;
+			var valor_lumi = document.getElementById('valor_lumi').value;
+			var minimo_temp = 5;
+			var maximo_temp = 40;
+			var minimo_lumi = 5;
+			var maximo_lumi = 40;
+			
+			if(valor_temp > maximo_temp || valor_temp < minimo_temp){
+				msg = "El valor de la temperatura esta fuera del umbral <br> <br>";
+				aire = true;
+				socket.emit('alerta', "El valor de la temperatura esta fuera del umbral");
+				
+			}
+
+			if(valor_lumi > maximo_lumi || valor_lumi < minimo_lumi){
+				msg = "El valor de la luminosidad esta fuera del umbral <br> <br>";
+				lumi = true;
+				socket.emit('alerta', "El valor de la luminosidad esta fuera del umbral");
+				
+			}
+
+			if(aire && lumi && persianaCerrada == false){
+				cerrarPersianas();
+			}else{
+				if(persianaCerrada == true && (aire == false || lumi == false) ){
+					abrirPersianas();
+				}
+				
+			}
+
+			
+
+		}
+
+		function apagarAire(){
+			var msg;
+			var data = new Array();
+			if(aireEncendido == true){
+				aireEncendido = false;
+				data.push('Se ha apagado el aire');
+				data.push(aireEncendido);
+				data.push('aire');
+				socket.emit('estado-aire',data);
+			}
+		}
+
+		function encenderAire(){
+			var msg;
+			var data = new Array();
+			if(aireEncendido == false){
+				aireEncendido = true;
+				data.push('Se ha encendido el aire');
+				data.push(aireEncendido);
+				data.push('aire');
+				socket.emit('estado-aire',data);
+			}
+		}
+
+		function cerrarPersianas(){
+			var msg;
+			var data = new Array();
+			if(persianaCerrada == false){
+				persianaCerrada = true;
+				data.push('Se han cerrado las persianas');
+				data.push(persianaCerrada);
+				data.push('persianas');
+				socket.emit('estado-persianas', data);
+			}
+		}
+
+		function abrirPersianas(){
+			var msg;
+			var data = new Array();
+			if(persianaCerrada == true){
+				persianaCerrada = false;
+				data.push('Se han abierto las persianas');
+				data.push(persianaCerrada);
+				data.push('persianas');
+				socket.emit('estado-persianas', data);
+			}
+		}
+	
+	
+
+		function enviar_medidas() {
+			
+			var valores = new Array();
+			valores.push(document.getElementById('valor_temp').value);
+			valores.push(document.getElementById('valor_lumi').value);
+			comprobacionAgente();
+			socket.emit('nuevos-datos', valores);
+			
+    }
+
+
+
+
+	    
+		var serviceURL = document.URL;
+		var socket = io.connect(serviceURL);
+
+		socket.on('all-connections', function(data){
+			if(data[2] == 'aire'){
+				aireEncendido = data[1];
+			}else{
+				persianaCerrada = data[1];
+			}
+			var msg = data[0];
+			msg += '<br> <br>';
+			actualizarHistorial(msg);
+		});
+
+		socket.on('emision-medidas', function(data){
+			var msg = 'El nuevo valor de la temperatura es '+data[0]+' y el de la luminosidad es '+data[1];
+			msg += '<br> <br>';
+			actualizarHistorial(msg);
+		});
+
+		socket.on('emision-alerta', function(msg){
+			msg += '<br> <br>';
+			actualizarHistorial(msg);
+		});
+		
+
+		socket.on('disconnect', function() {
+			actualizarHistorial('El servicio ha dejado de funcionar!!');
+		});
+	
+		
+		
+	</script>
+</html>
+
+
